@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  nodejs:
+    image: node:22.2 # Use an official Node.js image from Docker Hub
+    container_name: visitorlog-app
+    working_dir: /var/www/visitorlog
+    volumes:
+      - ./:/var/www/visitorlog # Mount your Node.js app code into the container
+    ports:
+      - "3000:3000" # Map container port 3000 to host port 3000
+    command: npm run dev #npm start # Adjust based on your start command in package.json
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    # volumes:
+    #   - ./data/db:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: visitorlog
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Api2024
