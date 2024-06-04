@@ -26,6 +26,12 @@ const CompanySchema = new mongoose.Schema({
         required: true,
         minLength: 3
     },
+    phoneCode: {
+        type: Number,
+        required: true,
+        min: 1,
+        max: 9999
+    },
     phone: {
         type: String,
         required: true,

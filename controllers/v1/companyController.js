@@ -3,10 +3,10 @@ const Company = require('../../models/Company');
 const register = async (req, res) => {
 
     try {
-        const { name, contactPerson, phone, email, domain, address } = req.body;
+        const { name, contactPerson, phoneCode, phone, email, domain, address } = req.body;
 
         company = new Company({
-            name, contactPerson, phone, email, domain, address
+            name, contactPerson, phoneCode, phone, email, domain, address
         });
 
         const newCompany = await company.save();
