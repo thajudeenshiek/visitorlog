@@ -1,19 +1,19 @@
 
 const mongoose = require('mongoose');
 
-// const AddressSchema = new mongoose.Schema({
-//     officeNo: String,
-//     floorNo: String,
-//     buldingName: String,
-//     street: String,
-//     city: String,
-//     country: String,
-//     poBox: {
-//         type: Number,
-//         min: 3,
-//         max: 8
-//     }
-// });
+const AddressSchema = new mongoose.Schema({
+    officeNo: String,
+    floorNo: String,
+    buldingName: String,
+    street: String,
+    city: String,
+    country: String,
+    poBox: {
+        type: String,
+        min: 2,
+        max: 8
+    }
+});
 
 const CompanySchema = new mongoose.Schema({
     name: {
@@ -48,7 +48,7 @@ const CompanySchema = new mongoose.Schema({
         required: false,
         lowercase: true
     },
-    // address: AddressSchema,
+    address: AddressSchema,
     createdAt: {
         type: Date,
         immutable: true,
