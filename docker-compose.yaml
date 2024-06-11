@@ -10,6 +10,7 @@ services:
     ports:
       - "3000:3000" # Map container port 3000 to host port 3000
     command: npm run dev #npm start # Adjust based on your start command in package.json
+    restart: always
   mongodb:
     image: mongo:7.0
     container_name: mongodb
@@ -21,3 +22,4 @@ services:
       MONGO_INITDB_DATABASE: visitorlog
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: Api2024
+    restart: always
