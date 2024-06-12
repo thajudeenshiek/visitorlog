@@ -8,7 +8,6 @@ const countryController = require("../controllers/v1/countryController");
 const visitPurposeController = require("../controllers/v1/visitPurposeController");
 
 // Use visitor routes
-router.route('/visitor/visitPurpose').post(visitorController.saveVisitPurpose);
 router.route('/visitor/register').post(visitorController.register);
 router.route('/visitor/list').get(visitorController.list);
 
@@ -24,6 +23,10 @@ router.route('/country/flag').get(countryController.flag);
 router.route('/country/code').get(countryController.code);
 
 // Use purpose of the visit
-// router.route('/visitPurpose/list').get(visitPurposeController.list);
+router.route('/visitPurpose/')
+    .post(visitPurposeController.addVisitPurpose)
+    .get(visitPurposeController.listVisitPurpose)
+    .put(visitPurposeController.updateVisitPurpose)
+    .delete(visitPurposeController.deleteVisitPurpose);
 
 module.exports = router;

@@ -2,6 +2,8 @@
 const mongoose = require('mongoose');
 // Retrieve the Schema constructor from mongoose
 const { Schema } = mongoose;
+const { format } = require('date-fns');
+const visitPurpose = require('./VisitPurpose');
 
 const visitorSchema = new mongoose.Schema({
     firstName: {
@@ -38,7 +40,7 @@ const visitorSchema = new mongoose.Schema({
     idNumber: {
         type: String,
         required: true,
-        minLength: 10
+        minLength: 8
     },
     visitPurpose: {
         type: Schema.Types.ObjectId,
@@ -52,20 +54,8 @@ const visitorSchema = new mongoose.Schema({
     checkOut: {
         type: Date,
         default: Date.now
-    },
-    // avb: {
-    //     type: Array,
-    // },
-    createdAt: {
-        type: Date,
-        immutable: true,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
     }
-});
+}, { timestamps: true });
 
 // Create a virtual property for the full name
 visitorSchema.virtual('id').get(function () {
@@ -76,20 +66,28 @@ visitorSchema.virtual('fullName').get(function () {
     return `${this.firstName} ${this.lastName}`;
 });
 
+visitorSchema.virtual('checkInDateTime').get(function () {
+    return { 'date': format(this.checkIn, 'yyyy-MM-dd'), 'time': format(this.checkIn, 'HH:mm') };
+});
+
 visitorSchema.virtual('checkInDate').get(function () {
-    return this.checkIn.toISOString().split('T')[0];
+    return format(this.checkIn, 'yyyy-MM-dd');
 });
 
 visitorSchema.virtual('checkInTime').get(function () {
-    return this.checkIn.toISOString().split('T')[1].split('.')[0];
+    return format(this.checkIn, 'HH:mm');
+});
+
+visitorSchema.virtual('checkOutDateTime').get(function () {
+    return { 'date': format(this.checkOut, 'yyyy-MM-dd'), 'time': format(this.checkOut, 'HH:mm') };
 });
 
 visitorSchema.virtual('checkOutDate').get(function () {
-    return this.checkOut.toISOString().split('T')[0];
+    return format(this.checkOut, 'yyyy-MM-dd');
 });
 
 visitorSchema.virtual('checkOutTime').get(function () {
-    return this.checkOut.toISOString().split('T')[1].split('.')[0];
+    return format(this.checkOut, 'HH:mm');
 });
 
 // Ensure virtual fields are included in toJSON and toObject
@@ -98,15 +96,4 @@ visitorSchema.set('toObject', { virtuals: true });
 
 const Visitor = mongoose.model("Visitor", visitorSchema);
 
-const visitPurposeSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    }
-});
-
-const VisitPurpose = mongoose.model('VisitPurpose', visitPurposeSchema);
-
-module.exports = {
-    Visitor, VisitPurpose
-};
+module.exports = Visitor;

@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 
-const AddressSchema = new mongoose.Schema({
+const addressSchema = new mongoose.Schema({
     officeNo: String,
     floorNo: String,
     buldingName: String,
@@ -15,7 +15,7 @@ const AddressSchema = new mongoose.Schema({
     }
 });
 
-const CompanySchema = new mongoose.Schema({
+const companySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -48,20 +48,18 @@ const CompanySchema = new mongoose.Schema({
         required: false,
         lowercase: true
     },
-    address: AddressSchema,
-    createdAt: {
-        type: Date,
-        immutable: true,
-        default: () => Date.now()
-    },
-    updatedAt: {
-        type: Date,
-        default: () => Date.now()
-    }
+    address: addressSchema
+}, { timestamps: true });
+
+// Create a virtual property for the full name
+companySchema.virtual('id').get(function () {
+    return `${this._id}`;
 });
 
+// Ensure virtual fields are included in toJSON and toObject
+companySchema.set('toJSON', { virtuals: true });
+companySchema.set('toObject', { virtuals: true });
 
-
-const Company = mongoose.model("Company", CompanySchema);
+const Company = mongoose.model("Company", companySchema);
 
 module.exports = Company;

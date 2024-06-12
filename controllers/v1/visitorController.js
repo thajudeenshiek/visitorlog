@@ -1,56 +1,6 @@
-const { Visitor, VisitPurpose } = require('../../models/Visitor');
-
-const saveVisitPurpose = async (req, res) => {
-
-    try {
-        const { name } = req.body;
-
-        const newVisitPurpose = new VisitPurpose({
-            name
-        });
-
-        const savedVisitPurpose = await newVisitPurpose.save();
-
-        // const visitorData = {
-        //         id: savedVisitor.id,
-        //         fullName: savedVisitor.fullName,
-        //         phone: savedVisitor.phone,
-        //         email: savedVisitor.email,
-        //         checkIn: savedVisitor.checkIn,
-        //         checkOut: savedVisitor.checkOut
-        //     };
-
-        const responseCode = 201
-        const responseDate = {
-            "success": true,
-            "code": responseCode,
-            "message": "Register Successfully!",
-            "data": savedVisitPurpose
-        }
-        res.status(responseCode).send(responseDate);
-    } catch (err) {
-        console.error(err);
-
-        // let errors = {};
-
-        // let errorsObj = err.errors;
-        // Object.keys(errorsObj).forEach(key => {
-        //     let message = "";
-        //     let errorMessage = errorsObj[key]["message"];
-        //     // console.log(`Key: ${key}, Value: ${errorsObj[key]["message"]}`);
-        //     errors[key] = errorMessage;
-        // });
-
-        const responseCode = 400
-        const responseDate = {
-            "success": false,
-            "code": responseCode,
-            "message": "Error Occured!",
-            "errors": err
-        }
-        res.status(responseCode).json(responseDate);
-    }
-}
+const express = require('express');
+const Visitor = require('../../models/Visitor');
+const VisitPurpose = require('../../models/VisitPurpose');
 
 const register = async (req, res) => {
 
@@ -63,13 +13,17 @@ const register = async (req, res) => {
 
         const savedVisitor = await newVisitor.save();
 
+        const visitPurposeId = savedVisitor.visitPurpose; 
+        const visitPurposeData = await VisitPurpose.findById(savedVisitor.visitPurpose);
+
         const visitorData = {
             id: savedVisitor.id,
             fullName: savedVisitor.fullName,
             phone: savedVisitor.phone,
             email: savedVisitor.email,
-            checkIn: savedVisitor.checkIn,
-            checkOut: savedVisitor.checkOut
+            visitPurpose: visitPurposeData.name,
+            checkIn: savedVisitor.checkInDateTime,
+            checkOut: savedVisitor.checkOutDateTime
         };
 
         const responseCode = 201;
@@ -81,6 +35,8 @@ const register = async (req, res) => {
         };
         res.status(responseCode).json(responseDate);
     } catch (error) {
+        console.error(error);
+        
         if (error.name === 'ValidationError') {
             const formattedErrors = Object.keys(error.errors).map(key => ({
                 path: error.errors[key].path,
@@ -113,7 +69,7 @@ const list = async (req, res) => {
     try {
 
         const visitors = await Visitor
-            .find({ checkIn: { '$gte': new Date("2024-06-10") } }).populate('visitPurpose', 'name', 'VisitPurpose')
+            .find({ checkIn: { '$eq': new Date() } }).populate('visitPurpose', 'name', 'VisitPurpose')
             // .select('id, firstName lastName phone email checkIn checkOut visitPurpose')
             .sort({ checkIn: 'asc' });
 
@@ -124,10 +80,8 @@ const list = async (req, res) => {
                 phone: visitor.phone,
                 email: visitor.email,
                 visitPurpose: visitor.visitPurpose.name,
-                checkInDate: visitor.checkInDate,
-                checkInTime: visitor.checkInTime,
-                checkOutDate: visitor.checkOutDate,
-                checkOutTime: visitor.checkOutTime
+                checkIn: visitor.checkInDateTime,
+                checkOut: visitor.checkOutDateTime
             };
         });
 
@@ -140,6 +94,8 @@ const list = async (req, res) => {
         }
         res.status(responseCode).json(responseDate)
     } catch (error) {
+        console.error(error);
+
         if (error.name === 'ValidationError') {
             const formattedErrors = Object.keys(error.errors).map(key => ({
                 path: error.errors[key].path,
@@ -167,8 +123,4 @@ const list = async (req, res) => {
     }
 }
 
-module.exports = {
-    saveVisitPurpose,
-    register,
-    list
-}
+module.exports = { register, list }
