@@ -10,7 +10,7 @@ const { errorHandler } = require('./middlewares/errorHandler');
 const dotenv = require('dotenv');
 
 // Determine the environment
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV;
 console.log(env);
 
 // Construct the path to the .env file
