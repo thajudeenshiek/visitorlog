@@ -14,15 +14,15 @@ const env = process.env.NODE_ENV;
 console.log(env);
 
 // Construct the path to the .env file
-const envPath = path.resolve(__dirname, `.env.${env}`);
+// const envPath = path.resolve(__dirname, `.env.${env}`);
 
 // Check if the .env file exists
-if (fs.existsSync(envPath)) {
-    dotenv.config({ path: envPath });
-    console.log(`Loaded ${env} environment variables from ${envPath}`);
-} else {
-    console.warn(`No .env file found for ${env} environment at ${envPath}`);
-}
+// if (fs.existsSync(envPath)) {
+//     dotenv.config({ path: envPath });
+//     console.log(`Loaded ${env} environment variables from ${envPath}`);
+// } else {
+//     console.warn(`No .env file found for ${env} environment at ${envPath}`);
+// }
 
 // Import versioned routes
 const v1Routes = require('./routes/v1Routes');
