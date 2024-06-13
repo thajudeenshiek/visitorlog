@@ -1,3 +1,6 @@
+// Load environment variables from .env file
+require('dotenv').config();
+
 const express = require('express');
 const bodyparser = require('body-parser');
 const connectDB = require('./config/db');
@@ -7,22 +10,10 @@ const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 const { logger } = require('./middlewares/logEvents');
 const { errorHandler } = require('./middlewares/errorHandler');
-const dotenv = require('dotenv');
 
 // Determine the environment
-const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV || 'development';
 console.log(env);
-
-// Construct the path to the .env file
-// const envPath = path.resolve(__dirname, `.env.${env}`);
-
-// Check if the .env file exists
-// if (fs.existsSync(envPath)) {
-//     dotenv.config({ path: envPath });
-//     console.log(`Loaded ${env} environment variables from ${envPath}`);
-// } else {
-//     console.warn(`No .env file found for ${env} environment at ${envPath}`);
-// }
 
 // Import versioned routes
 const v1Routes = require('./routes/v1Routes');
