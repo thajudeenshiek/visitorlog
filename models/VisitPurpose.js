@@ -13,7 +13,10 @@ const visitPurposeSchema = new mongoose.Schema({
         type: Boolean,
         defaults: false
     }
-}, { timestamps: true });
+}, {
+    collection: 'visit_purposes', // Specify the collection name here
+    timestamps: true 
+});
 
 visitPurposeSchema.methods.softDelete = function (callback) {
     this.isDeleted = true;

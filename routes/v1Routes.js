@@ -15,7 +15,7 @@ router.route('/visitor/list').get(visitorController.list);
 router.route('/company/register').post(companyController.register);
 router.route('/company/list').get(companyController.list);
 router.route('/company/:id').get(companyController.show)
-router.route('/company/:id').post(companyController.update)
+router.route('/company/:id').put(companyController.update)
 
 // Use country routes
 router.route('/country/list').get(countryController.list);

@@ -11,10 +11,6 @@ const corsOptions = require('./config/corsOptions');
 const { logger } = require('./middlewares/logEvents');
 const { errorHandler } = require('./middlewares/errorHandler');
 
-// Determine the environment
-const env = process.env.NODE_ENV || 'development';
-console.log(env);
-
 // Import versioned routes
 const v1Routes = require('./routes/v1Routes');
 const v2Routes = require('./routes/v2Routes');
@@ -36,6 +32,8 @@ connectDB();
 app.use('/api/v1', v1Routes);
 app.use('/api/v2', v2Routes);
 
+app.use(errorHandler);
+
 app.listen(port, () => {
     console.log(`App Running on port ${port}`)
 })
@@ -44,5 +42,3 @@ app.all('*', (req, res) => {
     res.status(404);
     res.json({ "error": "404 Not Found" })
 })
-
-app.use(errorHandler)

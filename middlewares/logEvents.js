@@ -19,8 +19,10 @@ const logEvents = async (message, logName) => {
     }
 }
 
+const logDate = `${format(new Date(), 'yyyy-MM-dd')}`
+
 const logger = (req, res, next) => {
-    logEvents(`${req.method}\t${req.headers.origin}\t${req.url}`, 'reqLog.log')
+    logEvents(`${req.method}\t${req.headers.origin}\t${req.url}`, `${logDate}` + '_reqLog.log')
     // console.log(`${req.method} ${req.path}`)
     next()
 }

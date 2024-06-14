@@ -1,3 +1,4 @@
+const express = require('express');
 const Company = require('../../models/Company');
 
 const register = async (req, res) => {
@@ -5,22 +6,47 @@ const register = async (req, res) => {
     try {
         const { name, contactPerson, phoneCode, phone, email, domain, address } = req.body;
 
-        company = new Company({
+        const newCompany = new Company({
             name, contactPerson, phoneCode, phone, email, domain, address
         });
 
-        const newCompany = await company.save();
+        const saveCompany = await newCompany.save();
 
         const responseCode = 201
         const responseDate = {
             "success": true,
             "code": responseCode,
             "message": "Register Successfully!",
-            "data": newCompany
+            "data": saveCompany
         }
         res.status(responseCode).json(responseDate)
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
+
+        if (error.name === 'ValidationError') {
+            const formattedErrors = Object.keys(error.errors).map(key => ({
+                path: error.errors[key].path,
+                message: error.errors[key].message
+            }));
+
+            const responseCode = 400;
+            const responseDate = {
+                "success": false,
+                "code": responseCode,
+                "message": "Error Occured!",
+                "errors": formattedErrors
+            }
+            res.status(responseCode).json(responseDate);
+        } else {
+            const responseCode = 500;
+            const responseDate = {
+                "success": false,
+                "code": responseCode,
+                "message": "Error Occured!",
+                "errors": { "Error": "Server error" }
+            }
+            res.status(responseCode).json(responseDate);
+        }
     }
 }
 
@@ -37,8 +63,33 @@ const list = async (req, res) => {
             "data": companyData
         }
         res.status(responseCode).json(responseDate)
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
+
+        if (error.name === 'ValidationError') {
+            const formattedErrors = Object.keys(error.errors).map(key => ({
+                path: error.errors[key].path,
+                message: error.errors[key].message
+            }));
+
+            const responseCode = 400;
+            const responseDate = {
+                "success": false,
+                "code": responseCode,
+                "message": "Error Occured!",
+                "errors": formattedErrors
+            }
+            res.status(responseCode).json(responseDate);
+        } else {
+            const responseCode = 500;
+            const responseDate = {
+                "success": false,
+                "code": responseCode,
+                "message": "Error Occured!",
+                "errors": { "Error": "Server error" }
+            }
+            res.status(responseCode).json(responseDate);
+        }
     }
 }
 
@@ -56,8 +107,33 @@ const show = async (req, res) => {
             "data": data
         }
         res.status(responseCode).json(responseDate)
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
+
+        if (error.name === 'ValidationError') {
+            const formattedErrors = Object.keys(error.errors).map(key => ({
+                path: error.errors[key].path,
+                message: error.errors[key].message
+            }));
+
+            const responseCode = 400;
+            const responseDate = {
+                "success": false,
+                "code": responseCode,
+                "message": "Error Occured!",
+                "errors": formattedErrors
+            }
+            res.status(responseCode).json(responseDate);
+        } else {
+            const responseCode = 500;
+            const responseDate = {
+                "success": false,
+                "code": responseCode,
+                "message": "Error Occured!",
+                "errors": { "Error": "Server error" }
+            }
+            res.status(responseCode).json(responseDate);
+        }
     }
 }
 
@@ -95,8 +171,33 @@ const update = async (req, res) => {
                 }
             });
         res.status(responseCode).json(responseDate)
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
+
+        if (error.name === 'ValidationError') {
+            const formattedErrors = Object.keys(error.errors).map(key => ({
+                path: error.errors[key].path,
+                message: error.errors[key].message
+            }));
+
+            const responseCode = 400;
+            const responseDate = {
+                "success": false,
+                "code": responseCode,
+                "message": "Error Occured!",
+                "errors": formattedErrors
+            }
+            res.status(responseCode).json(responseDate);
+        } else {
+            const responseCode = 500;
+            const responseDate = {
+                "success": false,
+                "code": responseCode,
+                "message": "Error Occured!",
+                "errors": { "Error": "Server error" }
+            }
+            res.status(responseCode).json(responseDate);
+        }
     }
 }
 

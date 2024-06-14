@@ -55,7 +55,10 @@ const visitorSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-}, { timestamps: true });
+}, {
+    collection: 'visitors', // Specify the collection name here
+    timestamps: true
+});
 
 // Create a virtual property for the full name
 visitorSchema.virtual('id').get(function () {
@@ -93,6 +96,16 @@ visitorSchema.virtual('checkOutTime').get(function () {
 // Ensure virtual fields are included in toJSON and toObject
 visitorSchema.set('toJSON', { virtuals: true });
 visitorSchema.set('toObject', { virtuals: true });
+
+// Remove the _id and __v fields from the JSON output
+// visitorSchema.set('toJSON', {
+//     virtuals: true,
+//     transform: (doc, ret, options) => {
+//         delete ret._id;
+//         delete ret.__v;
+//         return ret;
+//     }
+// });
 
 const Visitor = mongoose.model("Visitor", visitorSchema);
 
